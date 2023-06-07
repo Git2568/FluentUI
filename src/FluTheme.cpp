@@ -44,19 +44,18 @@ bool FluTheme::eventFilter(QObject *obj, QEvent *event)
     return false;
 }
 
+// is system in dark mode
 bool FluTheme::systemDark()
 {
 #if QT_VERSION >= QT_VERSION_CHECK(6,5,0)
-    if (const QStyleHints * const hints = QGuiApplication::styleHints()) {
-        return (hints->colorScheme() == Qt::ColorScheme::Dark);
-    }
-    return false;
-#else
+    return (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark);
+#elif ((QT_VERSION >= QT_VERSION_CHECK(6, 2, 1)))
     if (const QPlatformTheme * const theme = QGuiApplicationPrivate::platformTheme()) {
         return (theme->appearance() == QPlatformTheme::Appearance::Dark);
     }
     return false;
 #endif
+    return false;
 }
 
 bool FluTheme::dark(){
