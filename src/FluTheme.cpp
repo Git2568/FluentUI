@@ -6,6 +6,7 @@
 #include <QtGui/qpa/qplatformtheme.h>
 #include <QtGui/private/qguiapplication_p.h>
 #include <QGuiApplication>
+#include <QStyleHints>
 
 FluTheme* FluTheme::m_instance = nullptr;
 
@@ -45,10 +46,17 @@ bool FluTheme::eventFilter(QObject *obj, QEvent *event)
 
 bool FluTheme::systemDark()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6,5,0)
+    if (const QStyleHints * const hints = QGuiApplication::styleHints()) {
+        return (hints->colorScheme() == Qt::ColorScheme::Dark);
+    }
+    return false;
+#else
     if (const QPlatformTheme * const theme = QGuiApplicationPrivate::platformTheme()) {
         return (theme->appearance() == QPlatformTheme::Appearance::Dark);
     }
     return false;
+#endif
 }
 
 bool FluTheme::dark(){
