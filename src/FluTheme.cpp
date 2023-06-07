@@ -2,11 +2,14 @@
 
 #include "Def.h"
 #include "FluColors.h"
+#if (QT_VERSION >= QT_VERSION_CHECK(6,5,0))
+#include <QStyleHints>
+#elif ((QT_VERSION >= QT_VERSION_CHECK(6, 2, 1)))
 #include <QPalette>
 #include <QtGui/qpa/qplatformtheme.h>
 #include <QtGui/private/qguiapplication_p.h>
+#endif
 #include <QGuiApplication>
-#include <QStyleHints>
 
 FluTheme* FluTheme::m_instance = nullptr;
 
@@ -47,7 +50,7 @@ bool FluTheme::eventFilter(QObject *obj, QEvent *event)
 // is system in dark mode
 bool FluTheme::systemDark()
 {
-#if QT_VERSION >= QT_VERSION_CHECK(6,5,0)
+#if (QT_VERSION >= QT_VERSION_CHECK(6,5,0))
     return (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark);
 #elif ((QT_VERSION >= QT_VERSION_CHECK(6, 2, 1)))
     if (const QPlatformTheme * const theme = QGuiApplicationPrivate::platformTheme()) {
